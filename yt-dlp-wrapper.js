@@ -56,7 +56,7 @@ const downloadVideo = (url, quality, key) => {
             fs.mkdirSync(outputDir);
         }
 
-        const ytDlpPath = './yt-dlp';
+        const ytDlpPath = './yt-dlp_linux';
         const command = `${ytDlpPath} -f ${quality} --no-check-certificate -o "${outputDir}/%(title)s.%(ext)s" ${url}`;
 
         exec(command, async (error, stdout, stderr) => {
