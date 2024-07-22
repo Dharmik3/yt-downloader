@@ -18,7 +18,7 @@
         <h1>YouTube Video Downloader</h1>
         <form id="download-form">
           <label for="url">YouTube URL:</label><br />
-          <input type="text" id="url" name="url" /><br />
+          <input type="text" id="url" name="url" style="width: 500px" /><br />
           <label for="quality">Select Quality:</label><br />
           <select id="quality" name="quality">
             <option value="best">Best</option>
@@ -37,26 +37,29 @@
           e.preventDefault();
           const url = document.getElementById("url").value;
           const quality = document.getElementById("quality").value;
-
+try{
           const response = await fetch("/download", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url, quality }),
           });
 
-          if (response.ok) {
-            const blob = await response.blob();
-            const downloadUrl = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = downloadUrl;
-            a.download = "video.mp4"; // Modify as needed based on actual file name
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(downloadUrl);
-          } else {
-            alert("Failed to download video");
-          }
+          const result = await response.json();
+          const fileUrl = result.url; // Assuming the response contains a JSON object with a 'url' property
+          console.log(`File URL: ${fileUrl}`);
+
+          // Create a temporary link element to download the file
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = fileUrl;
+          a.download = "video.mp4"; // Optionally, specify the default file name
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(a.href);
+        }
+        catch(err){
+          alert('Failed to download please try again...')
+        }
         });
     </script>
   </body>
