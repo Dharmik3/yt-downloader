@@ -3,6 +3,79 @@
   <head>
     <title>YouTube Video Downloader</title>
   </head>
+  <style>
+    *,
+    html {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #2c2c2c;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #ff2222;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #f5f5f5;
+      font-size: 1rem;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 4px;
+      background-color: #ff2222;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #e61919;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+  </style>
   <body>
     <div
       style="
@@ -37,29 +110,28 @@
           e.preventDefault();
           const url = document.getElementById("url").value;
           const quality = document.getElementById("quality").value;
-try{
-          const response = await fetch("/download", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url, quality }),
-          });
+          try {
+            const response = await fetch("/download", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ url, quality }),
+            });
 
-          const result = await response.json();
-          const fileUrl = result.url; // Assuming the response contains a JSON object with a 'url' property
-          console.log(`File URL: ${fileUrl}`);
+            const result = await response.json();
+            const fileUrl = result.url; // Assuming the response contains a JSON object with a 'url' property
+            console.log(`File URL: ${fileUrl}`);
 
-          // Create a temporary link element to download the file
-          const a = document.createElement("a");
-          a.style.display = "none";
-          a.href = fileUrl;
-          a.download = "video.mp4"; // Optionally, specify the default file name
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(a.href);
-        }
-        catch(err){
-          alert('Failed to download please try again...')
-        }
+            // Create a temporary link element to download the file
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = fileUrl;
+            a.download = "video.mp4"; // Optionally, specify the default file name
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(a.href);
+          } catch (err) {
+            alert("Failed to download please try again...");
+          }
         });
     </script>
   </body>
